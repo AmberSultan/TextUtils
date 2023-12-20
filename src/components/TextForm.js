@@ -41,13 +41,41 @@ const handleStop = ()=>{
   window.speechSynthesis.cancel();
 }
 
-const handleCopy = ()=>{
-  console.log("you copied your text");
-  var text = document.getElementById('my-box')
-  text.select();
-  navigator.clipboard.writeText(text.value);
-  props.showAlert("Copied to Clipboard " , "success")
-}
+const handleCopy = () => {
+  var textElement = document.getElementById('my-box');
+
+  if (!textElement) {
+    console.error("Element with ID 'my-box' not found");
+    return;
+  }
+
+  const textToCopy = textElement.value;
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(textToCopy)
+      .then(() => {
+        props.showAlert("Copied to Clipboard", "success");
+      })
+      .catch((error) => {
+        console.error("Error copying to clipboard:", error);
+        props.showAlert("Error copying to Clipboard", "error");
+      });
+  } else {
+    // If Clipboard API is not supported, use a fallback method (execCommand)
+    try {
+      const textarea = document.createElement('textarea');
+      textarea.value = textToCopy;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      props.showAlert("Copied to Clipboard", "success");
+    } catch (error) {
+      console.error("Error copying to clipboard:", error);
+      props.showAlert("Error copying to Clipboard", "error");
+    }
+  }
+};
 
 const countWords = (inputText) => {
   const trimmedText = inputText.trim();  // Trim extra spaces

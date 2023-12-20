@@ -41,8 +41,8 @@ function App() {
 
         <div className="container my-2">
           <Routes>
-            <Route exact path="/about" element={<About mode={mode} />} />  {/*its always a good practice to use exact with path because after using exact word react do exact matching of your path but if you not use word exact your code also run and go to proper path but REACT DO PARTIAL MATCHING , so using exact word is recommended*/ }
-            <Route exact path="/" element={<TextForm showAlert={showAlert} heading="Enter your TEXT below" mode={mode} />} />
+            <Route path="/*" element={<TextForm showAlert={showAlert} heading="Enter your TEXT below" mode={mode} />} />
+            <Route path="/about" element={<About mode={mode} />} />
           </Routes>
         </div>
       </Router>
